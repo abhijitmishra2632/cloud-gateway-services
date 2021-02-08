@@ -1,0 +1,31 @@
+server:
+  port: 9191
+spring :
+  application :
+    name : cloud-gateway
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+      routes:
+        - id: address-service
+          uri: lb://ADDRESS-SERVICE
+          predicates:
+            - Path=/address/**
+        - id: LOGIN-SERVICE
+          uri: lb://LOGIN-SERVICE
+          predicates:
+            - Path=/register/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:4200/"
+            allowedMethods: "*"
+
+eureka:
+  client:
+    register-with-eureka : true
+    fetch-registry: true
+    serviceUrl.defaultZone : http://localhost:8761/eureka/
+  instance:
+    hostname: localhost
