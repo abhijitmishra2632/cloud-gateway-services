@@ -7,11 +7,34 @@ spring :
     discovery:
       enabled: true
     gateway:
+      globalcors:
+        corsConfigurations:
+          [/**]:
+            allowedHeaders:
+              - content-type
+            allowedOrigins: "http://localhost:4200/"
+            allowedMethods:
+              - GET
+              - POST
       routes:
-        - id: address-service
+        - id: LOGIN-SERVICE
+          uri: lb://LOGIN-SERVICE
+          predicates:
+            - Path=/user/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: LOGIN-SERVICE
+                fallbackuri: forward:/loginFallback
+        - id: ADDRESS-SERVICE
           uri: lb://ADDRESS-SERVICE
           predicates:
             - Path=/address/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ADDRESS-SERVICE
+                fallbackuri: forward:/cartFallback
         - id: CARTS-SERVICE
           uri: lb://CARTS-SERVICE
           predicates:
@@ -20,12 +43,6 @@ spring :
           uri: lb://PRODUCTS-SERVICE
           predicates:
             - Path=/product/**
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:4200/"
-            allowedMethods: "*"
-
 eureka:
   client:
     register-with-eureka : true
@@ -33,3 +50,15 @@ eureka:
     serviceUrl.defaultZone : http://localhost:8761/eureka/
   instance:
     hostname: localhost
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix-stream
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
