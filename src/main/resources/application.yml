@@ -18,6 +18,15 @@ spring :
               args:
                 name: LOGIN-SERVICE
                 fallbackuri: forward:/loginFallback
+        - id: USER-CONTACTS-SERVICE
+          uri: lb://USER-CONTACTS-SERVICE
+          predicates:
+            - Path=/contact/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-CONTACTS-SERVICE
+                fallbackuri: forward:/contactFallback
 eureka:
   client:
     register-with-eureka : true

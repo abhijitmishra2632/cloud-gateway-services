@@ -14,4 +14,8 @@ public class FallbackController {
     public Mono<String> cartFallback(){
         return Mono.just("Cart Service taking too long to respond. Please try again later..");
     }
+    @RequestMapping("/contactFallback")
+    public Mono<String> contactFallback(){
+        return Mono.just("Contact Service taking too long to respond. Please try again later..");
+    }
 }
