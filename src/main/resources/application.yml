@@ -1,5 +1,6 @@
 server:
   port: 9191
+  connection-timeout: 300000
 spring :
   application :
     name : cloud-gateway
@@ -7,15 +8,6 @@ spring :
     discovery:
       enabled: true
     gateway:
-      globalcors:
-        corsConfigurations:
-          [/**]:
-            allowedHeaders:
-              - content-type
-            allowedOrigins: "http://localhost:4200/"
-            allowedMethods:
-              - GET
-              - POST
       routes:
         - id: LOGIN-SERVICE
           uri: lb://LOGIN-SERVICE
@@ -26,23 +18,6 @@ spring :
               args:
                 name: LOGIN-SERVICE
                 fallbackuri: forward:/loginFallback
-        - id: ADDRESS-SERVICE
-          uri: lb://ADDRESS-SERVICE
-          predicates:
-            - Path=/address/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: ADDRESS-SERVICE
-                fallbackuri: forward:/cartFallback
-        - id: CARTS-SERVICE
-          uri: lb://CARTS-SERVICE
-          predicates:
-            - Path=/cart/**
-        - id: PRODUCTS-SERVICE
-          uri: lb://PRODUCTS-SERVICE
-          predicates:
-            - Path=/product/**
 eureka:
   client:
     register-with-eureka : true
@@ -61,4 +36,4 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 3000
+            timeoutInMilliseconds: 30000
