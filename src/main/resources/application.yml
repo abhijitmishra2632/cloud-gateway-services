@@ -27,6 +27,33 @@ spring :
               args:
                 name: USER-CONTACTS-SERVICE
                 fallbackuri: forward:/contactFallback
+        - id: PRODUCTS-SERVICE
+          uri: lb://PRODUCTS-SERVICE
+          predicates:
+            - Path=/product/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: PRODUCTS-SERVICE
+                fallbackuri: forward:/loginFallback
+        - id: CARTS-SERVICE
+          uri: lb://CARTS-SERVICE
+          predicates:
+            - Path=/cart/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: CARTS-SERVICE
+                fallbackuri: forward:/loginFallback
+        - id: ADDRESS-SERVICE
+          uri: lb://ADDRESS-SERVICE
+          predicates:
+            - Path=/address/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ADDRESS-SERVICE
+                fallbackuri: forward:/loginFallback
 eureka:
   client:
     register-with-eureka : true
