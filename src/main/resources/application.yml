@@ -54,6 +54,24 @@ spring :
               args:
                 name: ADDRESS-SERVICE
                 fallbackuri: forward:/loginFallback
+        - id: INVOICE-SERVICE
+          uri: lb://INVOICE-SERVICE
+          predicates:
+            - Path=/invoice/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: INVOICE-SERVICE
+                fallbackuri: forward:/loginFallback
+        - id: INVENTORY-SERVICE
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/inventory/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: INVENTORY-SERVICE
+                fallbackuri: forward:/loginFallback
 eureka:
   client:
     register-with-eureka : true
