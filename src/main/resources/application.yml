@@ -72,6 +72,15 @@ spring :
               args:
                 name: INVENTORY-SERVICE
                 fallbackuri: forward:/loginFallback
+        - id: ORDER-SERVICE
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ORDER-SERVICE
+                fallbackuri: forward:/loginFallback
 eureka:
   client:
     register-with-eureka : true
