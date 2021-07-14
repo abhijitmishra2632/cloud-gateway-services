@@ -1,6 +1,5 @@
 server:
   port: 9191
-  connection-timeout: 300000
 spring :
   application :
     name : cloud-gateway
@@ -100,4 +99,4 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 30000
+            timeoutInMilliseconds: 50000
